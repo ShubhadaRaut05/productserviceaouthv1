@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -44,6 +45,8 @@ public class ProductTests {
         product.setImageUrl("ledtv");
         product.setCategory(category);
         productRepository.save(product);
+
+
     }
     @Test
     @Transactional
@@ -65,6 +68,7 @@ public class ProductTests {
     @Commit
     void saveProductsCategory(){
         //rolled back changes
+        //get() for Optional
      Category category=categoryRepository.findById(2L).get();
 
         Product product=new Product();
@@ -82,5 +86,23 @@ public class ProductTests {
         product.setImageUrl("ledtv");
         product.setCategory(category);
         productRepository.save(product);
+
+        Category category1=new Category();
+        category1.setName("iPhone");
+        categoryRepository.save(category1);
+    }
+    @Test
+    void getProductsForCategory(){
+   // Category category=categoryRepository.findById(2L).get();
+        List<Category> categories=categoryRepository.findAllByIdIn(List.of(2L,52L));
+        //select * from category where id In(2,52)
+        //select * from products where category_id=2;
+        //select * from products where category_id=52;
+    for(Category category:categories){
+        for(Product product:category.getProducts()){
+            System.out.println(product.getPrice());
+        }
+    }
+
     }
 }
