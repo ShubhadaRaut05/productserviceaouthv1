@@ -8,6 +8,9 @@ import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.Rollback;
+
+import java.util.Optional;
 
 @SpringBootTest
 public class ProductTests {
@@ -52,5 +55,30 @@ public class ProductTests {
     @Test
     void deleteProduct(){
      productRepository.deleteById(1L);
+    }
+
+
+    @Test
+    @Transactional
+    @Rollback(value = false)
+    void saveProductsCategory(){
+        //rolled back changes
+     Category category=categoryRepository.findById(2L).get();
+
+        Product product=new Product();
+        product.setPrice(102);
+        product.setTitle("TV");
+        product.setDescription("Refridgeratoe");
+        product.setImageUrl("fridge");
+        product.setCategory(category);
+        productRepository.save(product);
+
+        product=new Product();
+        product.setPrice(103);
+        product.setTitle("TV");
+        product.setDescription("LED TV");
+        product.setImageUrl("ledtv");
+        product.setCategory(category);
+        productRepository.save(product);
     }
 }
