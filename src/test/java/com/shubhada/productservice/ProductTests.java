@@ -4,12 +4,14 @@ import com.shubhada.productservice.models.Category;
 import com.shubhada.productservice.models.Product;
 import com.shubhada.productservice.repositories.CategoryRepository;
 import com.shubhada.productservice.repositories.ProductRepository;
+import jakarta.persistence.NamedEntityGraph;
 import jakarta.transaction.Transactional;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Commit;
 import org.springframework.test.annotation.Rollback;
+import org.springframework.transaction.annotation.Propagation;
 
 import java.util.List;
 import java.util.Optional;
@@ -92,17 +94,37 @@ public class ProductTests {
         categoryRepository.save(category1);
     }
     @Test
-    void getProductsForCategory(){
+    @Transactional
+    void getProductsForCategory() throws InterruptedException {
    // Category category=categoryRepository.findById(2L).get();
         List<Category> categories=categoryRepository.findAllByIdIn(List.of(2L,52L));
         //select * from category where id In(2,52)
         //select * from products where category_id=2;
         //select * from products where category_id=52;
+        Thread.sleep(100L);
+        System.out.println("Doing something");
+        Thread.sleep(100L);
     for(Category category:categories){
         for(Product product:category.getProducts()){
             System.out.println(product.getPrice());
         }
     }
+
+    }
+
+    @Test
+    @Transactional
+    void getProductsForOneCategory() throws InterruptedException {
+        // Category category=categoryRepository.findById(2L).get();
+        Category category=categoryRepository.findById(2L).get();
+        Thread.sleep(100L);
+        System.out.println("Doing something");
+        Thread.sleep(100L);
+
+            for(Product product:category.getProducts()){
+                System.out.println(product.getPrice());
+            }
+
 
     }
 }

@@ -1,9 +1,6 @@
 package com.shubhada.productservice.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
@@ -18,8 +15,9 @@ import java.util.List;
 public class Category extends BaseModel {
     private String name;
     private String description;
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "category", cascade = {CascadeType.REMOVE})
-    @Fetch(FetchMode.JOIN)
-    @BatchSize(size = 1)
+    @OneToMany(fetch = FetchType.LAZY,mappedBy = "category", cascade = {CascadeType.REMOVE})
+    @Fetch(FetchMode.SUBSELECT)
+   // @BatchSize(size = 1)
+    @PersistenceContext(type = PersistenceContextType.EXTENDED)
     private List<Product> products;
 }
