@@ -76,7 +76,7 @@ public class ProductTests {
         Product product=new Product();
         product.setPrice(102);
         product.setTitle("TV");
-        product.setDescription("Refridgeratoe");
+        product.setDescription("Refridgerator");
         product.setImageUrl("fridge");
         product.setCategory(category);
         productRepository.save(product);
@@ -125,6 +125,13 @@ public class ProductTests {
                 System.out.println(product.getPrice());
             }
 
+
+    }
+
+    @Test
+    public void demonstrateCustomQueries(){
+        //List<ProductDBDto> productDBDtos = productRepository.laaoproductsWithId(52L);
+        List<Product> products=productRepository.getByIdAndTitle(2L,"iphone");
 
     }
 }
