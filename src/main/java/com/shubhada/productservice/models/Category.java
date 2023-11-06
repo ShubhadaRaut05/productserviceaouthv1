@@ -1,5 +1,6 @@
 package com.shubhada.productservice.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,9 +16,11 @@ import java.util.List;
 public class Category extends BaseModel {
     private String name;
     private String description;
-    @OneToMany(fetch = FetchType.LAZY,mappedBy = "category", cascade = {CascadeType.REMOVE})
-    @Fetch(FetchMode.SUBSELECT)
+   // @OneToMany(fetch = FetchType.LAZY,mappedBy = "category", cascade = {CascadeType.REMOVE})
+   // @Fetch(FetchMode.SUBSELECT)
    // @BatchSize(size = 1)
-    @PersistenceContext(type = PersistenceContextType.EXTENDED)
+    //@PersistenceContext(type = PersistenceContextType.EXTENDED)
+    @JsonManagedReference
+    @OneToMany(cascade=CascadeType.PERSIST, fetch=FetchType.LAZY,mappedBy = "category",orphanRemoval = true)
     private List<Product> products;
 }

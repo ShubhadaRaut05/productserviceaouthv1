@@ -15,7 +15,7 @@ public interface ProductService {
   Optional<Product> getSingleProduct(Long productId);
 
   //service should not take DTO object
-    Product addNewProduct(ProductDTO product);
+    Product addNewProduct(Product product);
 
     /*
     product object has only those fields filled which need to be update

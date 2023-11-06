@@ -6,6 +6,7 @@ import com.shubhada.productservice.dtos.ProductDTO;
 import com.shubhada.productservice.models.Category;
 import com.shubhada.productservice.models.Product;
 import org.springframework.boot.web.client.RestTemplateBuilder;
+import org.springframework.context.annotation.Primary;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
@@ -21,6 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+//@Primary
 public class FakeStoreProductImpl implements ProductService{
    private RestTemplateBuilder restTemplateBuilder;
    private FakeStoreClient fakeStoreClient;
@@ -94,7 +96,7 @@ public class FakeStoreProductImpl implements ProductService{
     }
 
     @Override
-    public Product addNewProduct(ProductDTO product) {
+    public Product addNewProduct(Product product) {
        /* RestTemplate restTemplate=restTemplateBuilder.build();
         ResponseEntity<FakeStoreProductDTO> response = restTemplate.postForEntity(
                 "https://fakestoreapi.com/products",

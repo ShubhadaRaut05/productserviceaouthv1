@@ -1,21 +1,27 @@
 package com.shubhada.productservice.models;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.shubhada.productservice.repositories.Queries;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product extends BaseModel{
     private String title;
     private double price;
     private String description;
-   // @ManyToOne(fetch = FetchType.LAZY,)
-    @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    //@ManyToOne(fetch = FetchType.LAZY)
+  //  @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
+    @JsonBackReference
+    @ManyToOne(cascade = {CascadeType.PERSIST},fetch=FetchType.LAZY)
+    @JoinColumn(name="category_id",insertable = false,updatable = false)
     private Category category;
     private String imageUrl;
 }

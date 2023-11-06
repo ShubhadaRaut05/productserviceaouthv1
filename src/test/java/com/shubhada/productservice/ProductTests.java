@@ -131,7 +131,7 @@ public class ProductTests {
     @Test
     public void demonstrateCustomQueries(){
         //List<ProductDBDto> productDBDtos = productRepository.laaoproductsWithId(52L);
-        List<Product> products=productRepository.getByIdAndTitle(2L,"iphone");
+       // List<Product> products=productRepository.getByIdAndTitle(2L,"iphone");
 
     }
 }

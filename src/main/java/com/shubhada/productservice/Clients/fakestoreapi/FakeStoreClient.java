@@ -1,6 +1,7 @@
 package com.shubhada.productservice.Clients.fakestoreapi;
 
 import com.shubhada.productservice.dtos.ProductDTO;
+import com.shubhada.productservice.dtos.ProductResponseDTO;
 import com.shubhada.productservice.models.Product;
 import com.shubhada.productservice.services.FakeStoreProductImpl;
 import org.springframework.boot.web.client.RestTemplateBuilder;
@@ -58,7 +59,7 @@ public class FakeStoreClient {
     }
 
     //service should not take DTO object
-   public  FakeStoreProductDTO addNewProduct(ProductDTO product){
+   public  FakeStoreProductDTO addNewProduct(Product product){
        RestTemplate restTemplate=restTemplateBuilder.build();
        ResponseEntity<FakeStoreProductDTO> response = restTemplate.postForEntity(
                "https://fakestoreapi.com/products",
@@ -127,5 +128,17 @@ public class FakeStoreClient {
         );
 
         return res.getBody();
+    }
+
+    public List<ProductResponseDTO> getProductsInCategory(String category){
+        RestTemplate restTemplate=restTemplateBuilder.build();
+        ResponseEntity<ProductResponseDTO[]> response=restTemplate.getForEntity(
+                "https://fakestoreapi.com/products/category/{category}",
+                ProductResponseDTO[].class,
+                category
+        );
+
+        return Arrays.asList(response.getBody());
+
     }
 }
