@@ -20,8 +20,8 @@ public class Product extends BaseModel{
     //@ManyToOne(fetch = FetchType.LAZY)
   //  @ManyToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     @JsonBackReference
-    @ManyToOne(cascade = {CascadeType.PERSIST},fetch=FetchType.LAZY)
-    @JoinColumn(name="category_id",insertable = false,updatable = false)
+    @ManyToOne(cascade = {CascadeType.ALL},fetch=FetchType.LAZY)
+    //@JoinColumn(name="category_id",insertable = false,updatable = false)
     private Category category;
     private String imageUrl;
 }
