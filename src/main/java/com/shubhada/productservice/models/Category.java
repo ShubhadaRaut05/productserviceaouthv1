@@ -21,6 +21,6 @@ public class Category extends BaseModel {
    // @BatchSize(size = 1)
     //@PersistenceContext(type = PersistenceContextType.EXTENDED)
     @JsonManagedReference
-    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY,mappedBy = "category",orphanRemoval = true)
+    @OneToMany(cascade=CascadeType.ALL, fetch=FetchType.LAZY,mappedBy = "category")
     private List<Product> products;
 }
