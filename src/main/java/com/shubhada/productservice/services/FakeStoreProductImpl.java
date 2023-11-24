@@ -22,7 +22,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-//@Primary
+@Primary
 public class FakeStoreProductImpl implements ProductService{
    private RestTemplateBuilder restTemplateBuilder;
    private FakeStoreClient fakeStoreClient;
@@ -113,6 +113,8 @@ public class FakeStoreProductImpl implements ProductService{
     //Patch for Object API
     @Override
     public Product updateProduct(Long productId, Product product) {
+        FakeStoreProductDTO fakeStoreProductDTOResponse=fakeStoreClient.updateProduct(productId,product);
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDTOResponse);
       /*RestTemplate restTemplate=restTemplateBuilder.build();*/
        /* RestTemplate restTemplate=restTemplateBuilder.requestFactory(
                 HttpComponentsClientHttpRequestFactory.class
@@ -138,12 +140,13 @@ public class FakeStoreProductImpl implements ProductService{
               productId
       );*/
        /* return convertFakeStoreProductDtoToProduct(response.getBody());*/
-        FakeStoreProductDTO fakeStoreProductDTOResponse=fakeStoreClient.updateProduct(productId,product);
-        return convertFakeStoreProductDtoToProduct(fakeStoreProductDTOResponse);
+
     }
 
     @Override
     public Product replaceProduct(Long productId, Product product) {
+        FakeStoreProductDTO fakeStoreProductDTOResponse=fakeStoreClient.replaceProduct(productId,product);
+        return convertFakeStoreProductDtoToProduct(fakeStoreProductDTOResponse);
        /* RestTemplate restTemplate=restTemplateBuilder.build();
         FakeStoreProductDTO fakeStoreProductDTO=new FakeStoreProductDTO();
         fakeStoreProductDTO.setDescription(product.getDescription());
@@ -159,9 +162,6 @@ public class FakeStoreProductImpl implements ProductService{
                 productId
 
         );*/
-        FakeStoreProductDTO fakeStoreProductDTOResponse=fakeStoreClient.replaceProduct(productId,product);
-        return convertFakeStoreProductDtoToProduct(fakeStoreProductDTOResponse);
-
 
     }
 

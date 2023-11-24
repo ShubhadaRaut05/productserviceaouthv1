@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-//@Primary
+@Primary
 public class FakeStoreCategoryImpl implements CategoryService{
     private RestTemplateBuilder restTemplateBuilder;
     private FakeStoreClient fakeStoreClient;

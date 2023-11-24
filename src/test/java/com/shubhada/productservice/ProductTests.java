@@ -41,10 +41,10 @@ public class ProductTests {
         //Category savedCategory=categoryRepository.save(category);
 
         Product product=new Product();
-        product.setPrice(101);
-        product.setTitle("TV");
-        product.setDescription("LED TV");
-        product.setImageUrl("ledtv");
+        product.setPrice(120);
+        product.setTitle("fridge");
+        product.setDescription("fridge");
+        product.setImageUrl("fridge");
         product.setCategory(category);
         productRepository.save(product);
 

@@ -10,8 +10,11 @@ import org.hibernate.annotations.NamedNativeQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
+
 
 public interface CategoryRepository extends JpaRepository<Category,Long> {
 
@@ -24,4 +27,8 @@ public interface CategoryRepository extends JpaRepository<Category,Long> {
 
     @Query(value="select name from category",nativeQuery = true)
     Object[] getCategories();
+
+    Optional<Category> getCategoryByName(String category);
+
+    // Optional<Category> findByCategoryName(String category);
 }

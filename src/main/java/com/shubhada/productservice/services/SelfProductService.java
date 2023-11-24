@@ -1,7 +1,9 @@
 package com.shubhada.productservice.services;
 
 import com.shubhada.productservice.dtos.ProductDTO;
+import com.shubhada.productservice.models.Category;
 import com.shubhada.productservice.models.Product;
+import com.shubhada.productservice.repositories.CategoryRepository;
 import com.shubhada.productservice.repositories.ProductRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Component;
@@ -11,11 +13,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-@Primary
+//@Primary
 public class SelfProductService implements ProductService{
     private ProductRepository productRepository;
-    public SelfProductService(ProductRepository productRepository){
+    private CategoryRepository categoryRepository;
+    public SelfProductService(ProductRepository productRepository,CategoryRepository categoryRepository){
         this.productRepository=productRepository;
+        this.categoryRepository=categoryRepository;
     }
     @Override
     public List<Product> getAllProducts() {
@@ -39,18 +43,16 @@ public class SelfProductService implements ProductService{
     @Override
     public Product updateProduct(Long productId, Product product) {
 
-        Product existingProduct=productRepository.findProductById(productId);
+        return productRepository.save(product);
 
-
-        return null;
     }
 
     @Override
     public Product replaceProduct(Long productId, Product product) {
 
-        return null;
-    }
+        return productRepository.save(product);
 
+    }
     @Override
     public Optional<Product> deleteProduct(Long productId) {
         Product product=productRepository.findProductById(productId);

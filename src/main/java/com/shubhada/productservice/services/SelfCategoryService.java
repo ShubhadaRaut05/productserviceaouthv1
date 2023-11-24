@@ -14,15 +14,14 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 @Service
-@Primary
+//@Primary
 public class SelfCategoryService implements CategoryService {
+
     private CategoryRepository categoryRepository;
-    @Autowired
-    private EntityManager em;
-    SessionFactory sessionFactory;
+
 
     @Autowired
-    public SelfCategoryService(@Qualifier("categoryRepository") CategoryRepository categoryRepository){
+    public SelfCategoryService( CategoryRepository categoryRepository){
         this.categoryRepository=categoryRepository;
     }
     @Override

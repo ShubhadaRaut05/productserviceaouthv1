@@ -4,8 +4,10 @@ import com.shubhada.productservice.dtos.*;
 import com.shubhada.productservice.exceptions.NotFoundException;
 import com.shubhada.productservice.models.Category;
 import com.shubhada.productservice.models.Product;
+import com.shubhada.productservice.repositories.CategoryRepository;
 import com.shubhada.productservice.repositories.ProductRepository;
 import com.shubhada.productservice.services.ProductService;
+import com.shubhada.productservice.services.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,10 +26,14 @@ public class ProductController {
     //inversion of control
     private final ProductService productService;
     private ProductRepository productRepository;
-    public ProductController(ProductService productService,ProductRepository productRepository){
+    @Autowired
+    private CategoryRepository categoryRepository;
+    private Utils utils;
+    public ProductController(ProductService productService,ProductRepository productRepository,Utils utils){
 
         this.productService=productService;
         this.productRepository=productRepository;
+        this.utils=utils;
     }
     public List<ProductResponseDTO> convertToProductResponseDTO(List<Product> products){
         List<ProductResponseDTO> newProducts=new ArrayList<>();
@@ -72,6 +78,8 @@ public class ProductController {
                 productService.getSingleProduct(productId)
         );
          return responseDTO;*/
+        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
+                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
         MultiValueMap<String,String> headers=new LinkedMultiValueMap<>();
         headers.add(
 
@@ -98,15 +106,7 @@ public class ProductController {
     }
     @PostMapping("")
     public ResponseEntity<ProductResponseDTO> addNewProduct(@RequestBody AddNewProductRequestDTO product){
-        Product products=new Product();
-        //products.setId(product.getId());
-        products.setCategory(new Category());
-        products.getCategory().setName(product.getCategory());
-        products.setTitle(product.getTitle());
-        products.setPrice(product.getPrice());
-        products.setDescription(product.getDescription());
-        products.setImageUrl(product.getImage());
-
+        Product products=utils.addDtoToProduct(product);
         ProductResponseDTO newProduct= convertToProductDTO(Optional.ofNullable(productService.addNewProduct(products)));
        /* Product newProduct=new Product();
         newProduct.setDescription(product.getDescription());
@@ -121,30 +121,24 @@ public class ProductController {
     //assignment take requestBody
 
     @PatchMapping("/{productId}")
-    public Product updateProduct(@PathVariable("productId") Long productId,
-                                 @RequestBody ProductDTO productDTO){
+    public ProductResponseDTO updateProduct(@PathVariable("productId") Long productId,
+                                 @RequestBody UpdateRequestDto productDTO) throws NotFoundException {
         //return "Updating a Product with id: "+productId +" and with data: "+productDTO;
         //convert productDTO object into Product object
-        Product product=new Product();
-        product.setId(productDTO.getId());
-        product.setCategory(new Category());
-     //   product.getCategory().setName(productDTO.getCategory());
-        product.setTitle(productDTO.getTitle());
-        product.setPrice(productDTO.getPrice());
-        product.setDescription(productDTO.getDescription());
-        return productService.updateProduct(productId,product);
+        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
+                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
+        Product newProduct= utils.productDtoToProduct(productDTO,productId);
+        return ProductResponseDTO.from(productService.replaceProduct(productId,newProduct));
     }
     @PutMapping("/{productId}")
-    public Product replaceProduct(@PathVariable("productId") Long productId,
-                                  @RequestBody ProductDTO productDTO){
-        Product product=new Product();
-        product.setId(productDTO.getId());
-        product.setCategory(new Category());
-      //  product.getCategory().setName(productDTO.getCategory());
-        product.setTitle(productDTO.getTitle());
-        product.setPrice(productDTO.getPrice());
-        product.setDescription(productDTO.getDescription());
-      return productService.replaceProduct(productId,product);
+    public ProductResponseDTO replaceProduct(@PathVariable("productId") Long productId,
+                                  @RequestBody UpdateRequestDto productDTO) throws NotFoundException {
+        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
+                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
+        Product newProduct= utils.productDtoToProduct(productDTO,productId);
+        return ProductResponseDTO.from(productService.replaceProduct(productId,newProduct));
+
+
     }
     @DeleteMapping("/{productId}")
     public Optional<Product> deleteProduct(@PathVariable("productId") Long productId) throws NotFoundException {
@@ -159,4 +153,6 @@ public class ProductController {
      errorResponseDTO.setErrorMessage(exception.getMessage());
      return new ResponseEntity<>(errorResponseDTO,HttpStatus.NOT_FOUND);
     }*/
+
+
 }
