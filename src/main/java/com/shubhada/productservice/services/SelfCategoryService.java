@@ -2,6 +2,8 @@ package com.shubhada.productservice.services;
 
 import com.shubhada.productservice.dtos.CategoryDTO;
 import com.shubhada.productservice.dtos.ProductResponseDTO;
+import com.shubhada.productservice.exceptions.NotFoundException;
+import com.shubhada.productservice.models.Category;
 import com.shubhada.productservice.models.Product;
 import com.shubhada.productservice.repositories.CategoryRepository;
 import jakarta.persistence.EntityManager;
@@ -14,7 +16,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 @Service
-//@Primary
+@Primary
 public class SelfCategoryService implements CategoryService {
 
     private CategoryRepository categoryRepository;
@@ -22,6 +24,7 @@ public class SelfCategoryService implements CategoryService {
 
     @Autowired
     public SelfCategoryService( CategoryRepository categoryRepository){
+
         this.categoryRepository=categoryRepository;
     }
     @Override
@@ -33,8 +36,8 @@ public class SelfCategoryService implements CategoryService {
     }
 
     @Override
-    public List<ProductResponseDTO> getProductsInCategory(String category) {
-
+    public List<ProductResponseDTO> getProductsInCategory(String category) throws NotFoundException {
+        Category cat=categoryRepository.getCategoryByName(category).orElseThrow(()->new NotFoundException("Category does not found with name: "+category));
         List<Object[]> prod=categoryRepository.findByCategory_Name(category);
         List<ProductResponseDTO> newProduct=new ArrayList<>();
         for(Object[] pr:prod){
@@ -46,7 +49,6 @@ public class SelfCategoryService implements CategoryService {
             pro.setImage((String)pr[4]);
             pro.setCategory((String)pr[5]);
             newProduct.add(pro);
-
         }
         return newProduct;
     }

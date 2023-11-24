@@ -1,6 +1,7 @@
 package com.shubhada.productservice.services;
 
 import com.shubhada.productservice.dtos.ProductDTO;
+import com.shubhada.productservice.exceptions.NotFoundException;
 import com.shubhada.productservice.models.Category;
 import com.shubhada.productservice.models.Product;
 import com.shubhada.productservice.repositories.CategoryRepository;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-//@Primary
+@Primary
 public class SelfProductService implements ProductService{
     private ProductRepository productRepository;
     private CategoryRepository categoryRepository;
@@ -29,8 +30,10 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public Optional<Product> getSingleProduct(Long productId) {
+    public Optional<Product> getSingleProduct(Long productId) throws NotFoundException {
 
+        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
+                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
         return Optional.of(productRepository.findProductById(productId));
     }
 
@@ -41,20 +44,26 @@ public class SelfProductService implements ProductService{
     }
 
     @Override
-    public Product updateProduct(Long productId, Product product) {
+    public Product updateProduct(Long productId, Product product) throws NotFoundException {
 
+        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
+                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
         return productRepository.save(product);
 
     }
 
     @Override
-    public Product replaceProduct(Long productId, Product product) {
+    public Product replaceProduct(Long productId, Product product) throws NotFoundException {
 
+        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
+                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
         return productRepository.save(product);
 
     }
     @Override
-    public Optional<Product> deleteProduct(Long productId) {
+    public Optional<Product> deleteProduct(Long productId) throws NotFoundException {
+        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
+                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
         Product product=productRepository.findProductById(productId);
      productRepository.deleteById(productId);
       return Optional.ofNullable(product);

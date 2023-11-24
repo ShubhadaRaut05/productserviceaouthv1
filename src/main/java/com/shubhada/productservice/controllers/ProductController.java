@@ -78,8 +78,8 @@ public class ProductController {
                 productService.getSingleProduct(productId)
         );
          return responseDTO;*/
-        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
-                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
+        /*Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
+                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));*/
         MultiValueMap<String,String> headers=new LinkedMultiValueMap<>();
         headers.add(
 
@@ -125,25 +125,24 @@ public class ProductController {
                                  @RequestBody UpdateRequestDto productDTO) throws NotFoundException {
         //return "Updating a Product with id: "+productId +" and with data: "+productDTO;
         //convert productDTO object into Product object
-        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
-                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
+
         Product newProduct= utils.productDtoToProduct(productDTO,productId);
         return ProductResponseDTO.from(productService.replaceProduct(productId,newProduct));
     }
     @PutMapping("/{productId}")
     public ProductResponseDTO replaceProduct(@PathVariable("productId") Long productId,
                                   @RequestBody UpdateRequestDto productDTO) throws NotFoundException {
-        Optional<Product> productOptional= Optional.ofNullable(Optional.ofNullable(productRepository.findProductById(productId))
-                .orElseThrow(() -> new NotFoundException("Does not found product with id: " + productId)));
+
         Product newProduct= utils.productDtoToProduct(productDTO,productId);
         return ProductResponseDTO.from(productService.replaceProduct(productId,newProduct));
 
 
     }
     @DeleteMapping("/{productId}")
-    public Optional<Product> deleteProduct(@PathVariable("productId") Long productId) throws NotFoundException {
+    public Optional<ProductResponseDTO> deleteProduct(@PathVariable("productId") Long productId) throws NotFoundException {
 
-        return Optional.ofNullable(productService.deleteProduct(productId).orElseThrow(() -> new NotFoundException("Product not found with id: " + productId)));
+        Optional<Product> productOptional=Optional.ofNullable(productService.deleteProduct(productId).orElseThrow(() -> new NotFoundException("Product not found with id: " + productId)));
+        return Optional.of(ProductResponseDTO.from(productOptional.get()));
         //return "hello";
        /* return "Deleting a Product with id: "+productId;*/
     }

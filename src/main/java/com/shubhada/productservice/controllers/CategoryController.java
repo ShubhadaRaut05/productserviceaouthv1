@@ -41,8 +41,6 @@ public class CategoryController {
     }
     @GetMapping("/{category}")
     public List<ProductResponseDTO> getProductsInCategory(@PathVariable("category") String category) throws NotFoundException {
-
-        Category cat=categoryRepository.getCategoryByName(category).orElseThrow(()->new NotFoundException("Category does not found with name: "+category));
         return categoryService.getProductsInCategory(category);
         //return "Getting Products In Category is: "+category;
     }
