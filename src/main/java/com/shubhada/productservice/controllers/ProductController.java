@@ -1,8 +1,11 @@
 package com.shubhada.productservice.controllers;
 
+import com.shubhada.productservice.Clients.authenticationclient.AuthenticationClient;
+import com.shubhada.productservice.Clients.authenticationclient.dtos.Role;
+import com.shubhada.productservice.Clients.authenticationclient.dtos.SessionStatus;
+import com.shubhada.productservice.Clients.authenticationclient.dtos.ValidateTokenResponseDto;
 import com.shubhada.productservice.dtos.*;
 import com.shubhada.productservice.exceptions.NotFoundException;
-import com.shubhada.productservice.models.Category;
 import com.shubhada.productservice.models.Product;
 import com.shubhada.productservice.repositories.CategoryRepository;
 import com.shubhada.productservice.repositories.ProductRepository;
@@ -11,6 +14,7 @@ import com.shubhada.productservice.services.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +25,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
+
 public class ProductController {
     @Autowired
     //inversion of control
@@ -28,12 +33,15 @@ public class ProductController {
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
-    private Utils utils;
-    public ProductController(ProductService productService,ProductRepository productRepository,Utils utils){
+    @Autowired
+    private AuthenticationClient authenticationClient;
+    private final Utils utils;
+    public ProductController(ProductService productService,ProductRepository productRepository,Utils utils,AuthenticationClient authenticationClient){
 
         this.productService=productService;
         this.productRepository=productRepository;
         this.utils=utils;
+        this.authenticationClient=authenticationClient;
     }
     public List<ProductResponseDTO> convertToProductResponseDTO(List<Product> products){
         List<ProductResponseDTO> newProducts=new ArrayList<>();
@@ -59,8 +67,33 @@ public class ProductController {
         product.setImage(products.get().getImageUrl());
         return product;
     }
+    //task make only admins be able to access all products
     @GetMapping("")
-    public List<ProductResponseDTO> getAllProducts(){
+    public ResponseEntity<List<ProductResponseDTO>> getAllProducts(@Nullable  @RequestHeader("AUTH_TOKEN") String token
+                                                                 , @Nullable @RequestHeader("USER_ID") Long userId){
+        //check if token exists
+//        if(token==null|| userId==null){
+//            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+//        }
+        //check if token is valid
+      /*  ValidateTokenResponseDto response= authenticationClient.validate(token,userId);
+        if(response.getSessionStatus().equals(SessionStatus.INVALID)){
+            return  new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }*/
+        //validate token
+        //RestTemplate rt=new RestTemplate
+        //rt.get("localhost:9090/auth/validate")
+
+        //check if user has permission
+       /* boolean isUserAdmin =false;
+        for(Role role:response.getUserDto().getRoles()){
+            if(role.getName().equals("ADMIN")){
+                isUserAdmin=true;
+            }
+        }*/
+       /* if(!isUserAdmin){
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }*/
         List<Product> products=new ArrayList<>();
         try {
             products= productService.getAllProducts();
@@ -69,7 +102,7 @@ public class ProductController {
             System.out.println(ex.getMessage());
         }
         //return "Getting All Products";
-        return convertToProductResponseDTO(products);
+        return new ResponseEntity<>(convertToProductResponseDTO(products),HttpStatus.OK);
     }
     @GetMapping("/{productId}") //GetSingleProductResponseDTO
     public ResponseEntity<ProductResponseDTO> getSingleProduct(@PathVariable("productId") Long productId) throws NotFoundException {

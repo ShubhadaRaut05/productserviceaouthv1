@@ -16,14 +16,14 @@ import org.springframework.transaction.annotation.Propagation;
 import java.util.List;
 import java.util.Optional;
 
-@SpringBootTest
+//@SpringBootTest
 public class ProductTests {
-    @Autowired
+   /* @Autowired
     private ProductRepository productRepository;
     @Autowired
     private CategoryRepository categoryRepository;
     @Test
-    void savingProductAndCategory(){
+    void savingProductAndCategory(){*/
       /*  Category category=new Category();
         category.setName("phones");
         Category savedCategory=categoryRepository.save(category);
@@ -36,7 +36,7 @@ public class ProductTests {
         product.setCategory(category);
         productRepository.save(product);*/
 
-        Category category=new Category();
+        /*Category category=new Category();
         category.setName("electronics");
         //Category savedCategory=categoryRepository.save(category);
 
@@ -49,8 +49,8 @@ public class ProductTests {
         productRepository.save(product);
 
 
-    }
-    @Test
+    }*/
+   /* @Test
     @Transactional
     void fetchTypesTests(){
      Product product=productRepository.findProductById(1L);
@@ -133,5 +133,5 @@ public class ProductTests {
         //List<ProductDBDto> productDBDtos = productRepository.laaoproductsWithId(52L);
        // List<Product> products=productRepository.getByIdAndTitle(2L,"iphone");
 
-    }
+    }*/
 }

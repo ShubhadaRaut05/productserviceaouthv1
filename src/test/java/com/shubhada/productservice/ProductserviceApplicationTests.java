@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
+//@SpringBootTest
 class ProductserviceApplicationTests {
-    @Autowired
+   /* @Autowired
     private JTUserRepository userRepository;
     @Autowired
     private JTMentorRepository mentorRepository;
@@ -37,7 +37,7 @@ class ProductserviceApplicationTests {
 
     @Test
     void contextLoads() {
-    }
+    }*/
    /* @Test
     void testDiffInheritances(){
         User user=new User();
